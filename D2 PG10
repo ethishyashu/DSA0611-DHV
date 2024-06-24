@@ -1,0 +1,51 @@
+# Creating the dataset
+data <- data.frame(
+  Parent_Category = c("A", "A", "B", "B", "C"),
+  Subcategory = c("A1", "A2", "B1", "B2", "C1"),
+  Value = c(10, 15, 20, 25, 12)
+)
+# Convert data to hierarchical structure
+library(dendextend)
+
+# Create a hierarchical structure
+dend <- data %>%
+  dendsort::dendsort(as.dendrogram(hclust(dist(data$Value))))
+
+# Plot dendrogram
+plot(dend, main = "Dendrogram of Parent Category and Subcategory")
+# Install and load the treemap package if not already installed
+# install.packages("treemap")
+library(treemap)
+
+# Create a treemap
+treemap(data, index = c("Parent_Category", "Subcategory"), vSize = "Value",
+        title = "Treemap of Parent Category and Subcategory Based on Value")
+# Install and load the sunburstR package if not already installed
+# install.packages("sunburstR")
+library(sunburstR)
+
+# Create a sunburst chart
+sunburst(data, path = c("Parent_Category", "Subcategory"), value = "Value",
+         legend_labels = c("Parent Category", "Subcategory", "Value"),
+         width = 600, height = 400)
+# Load ggplot2 library if not already loaded
+library(ggplot2)
+
+# Plot nested bar chart
+ggplot(data, aes(x = Parent_Category, y = Value, fill = Subcategory)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Nested Bar Plot of Parent Category and Subcategory",
+       x = "Parent Category", y = "Value", fill = "Subcategory") +
+  theme_minimal()
+# Install and load the networkD3 package if not already installed
+# install.packages("networkD3")
+library(networkD3)
+
+# Create a hierarchical edge bundling plot
+sankeyNetwork(Links = data.frame(source = c(0, 1, 2, 3, 4),
+                                 target = c(5, 5, 6, 6, 7),
+                                 value = data$Value),
+              Nodes = data.frame(name = unique(c(data$Parent_Category, data$Subcategory))),
+              Source = "source", Target = "target",
+              Value = "value", NodeID = "name",
+              units = "Value", fontSize = 12, nodeWidth = 30)

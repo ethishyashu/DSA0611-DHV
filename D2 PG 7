@@ -1,0 +1,44 @@
+# Creating the dataset
+word_data <- data.frame(
+  Word = c("Apple", "Orange", "Banana", "Grape", "Cherry"),
+  Frequency = c(15, 10, 8, 12, 5)
+)
+# Install and load the wordcloud package if not already installed
+# install.packages("wordcloud")
+library(wordcloud)
+
+# Create a word cloud
+wordcloud(words = word_data$Word, freq = word_data$Frequency, min.freq = 1,
+          max.words = 50, random.order = FALSE, colors = brewer.pal(8, "Dark2"))
+# Sort the data by Frequency
+word_data <- word_data[order(word_data$Frequency, decreasing = TRUE), ]
+
+# Bar plot of the top 5 most frequent words
+top_words <- head(word_data, 5)
+
+barplot(top_words$Frequency, names.arg = top_words$Word,
+        main = "Top 5 Most Frequent Words",
+        xlab = "Word",
+        ylab = "Frequency",
+        col = "skyblue",
+        border = "white")
+# Stacked bar chart
+barplot(as.matrix(word_data$Frequency), 
+        beside = TRUE, 
+        main = "Word Frequencies",
+        xlab = "Word",
+        ylab = "Frequency",
+        col = brewer.pal(length(word_data$Word), "Set3"),
+        legend.text = word_data$Word,
+        args.legend = list(x = "topright", bty = "n", inset = c(0.05, 0)))
+# Pie chart
+pie(word_data$Frequency, labels = word_data$Word,
+    main = "Distribution of Word Frequencies",
+    col = brewer.pal(length(word_data$Word), "Paired"),
+    border = "white")
+# Histogram of Frequency
+hist(word_data$Frequency, 
+     main = "Histogram of Frequency",
+     xlab = "Frequency",
+     col = "lightgreen",
+     border = "white")

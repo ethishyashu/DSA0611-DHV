@@ -1,0 +1,43 @@
+# Creating the dataset
+data <- data.frame(
+  ID = c(1, 2, 3, 4, 5),
+  Rating = c("Good", "Excellent", "Fair", "Poor", "Good")
+)
+# Bar plot for Rating counts
+barplot(table(data$Rating),
+        main = "Count of Each Rating Category",
+        xlab = "Rating",
+        ylab = "Count",
+        col = "skyblue",
+        border = "white")
+# Stacked bar plot
+barplot(table(data$Rating, data$ID),
+        legend = rownames(table(data$Rating)),
+        col = brewer.pal(nrow(table(data$Rating)), "Set2"),
+        main = "Stacked Bar Plot of Rating over IDs",
+        xlab = "ID",
+        ylab = "Count")
+# Pie chart for Rating distribution
+pie(table(data$Rating),
+    labels = levels(data$Rating),
+    main = "Distribution of Ratings",
+    col = brewer.pal(nlevels(data$Rating), "Paired"),
+    border = "white")
+# Calculate average Rating (assuming a numerical representation)
+# If not numerical, consider transforming Rating to a numerical scale for averaging
+average_rating <- mean(as.numeric(factor(data$Rating, levels = c("Poor", "Fair", "Good", "Excellent"))))
+
+# Lollipop plot
+plot(1, type = "n", xlim = c(0.5, 1.5), ylim = range(1:5),
+     main = "Average Rating",
+     xlab = "",
+     ylab = "Rating")
+segments(x0 = 1, y0 = 1:5, x1 = average_rating, y1 = 1:5, lwd = 2)
+points(x = average_rating, y = 1:5, pch = 19)
+# Bar chart for frequency of each Rating category
+barplot(table(data$Rating),
+        main = "Frequency of Each Rating Category",
+        xlab = "Rating",
+        ylab = "Frequency",
+        col = "lightgreen",
+        border = "white")

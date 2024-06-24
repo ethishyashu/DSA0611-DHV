@@ -1,0 +1,48 @@
+# Creating the dataset
+data <- data.frame(
+  ID = c(1, 2, 3, 4, 5),
+  Variable1 = c(0, 1, 0, 1, 0),
+  Variable2 = c(1, 0, 1, 1, 0),
+  Variable3 = c(0, 1, 1, 0, 0)
+)
+# Bar plot for Variable1
+barplot(table(data$Variable1),
+        main = "Count of Each Value in Variable1",
+        xlab = "Value",
+        ylab = "Count",
+        col = "skyblue",
+        border = "white")
+# Stacked bar plot
+barplot(as.matrix(table(data[, c("Variable1", "Variable2", "Variable3")])),
+        beside = TRUE,
+        legend = rownames(table(data[, c("Variable1", "Variable2", "Variable3")])),
+        col = brewer.pal(ncol(table(data[, c("Variable1", "Variable2", "Variable3")])), "Set2"),
+        main = "Stacked Bar Plot of Variables",
+        xlab = "ID",
+        ylab = "Count")
+# Pie chart for Variable2
+pie(table(data$Variable2),
+    labels = c("0", "1"),
+    main = "Proportion of 0s and 1s in Variable2",
+    col = c("skyblue", "lightgreen"),
+    border = "white")
+# Install and load the vcd package if not already installed
+# install.packages("vcd")
+library(vcd)
+
+# Mosaic plot for Variable1 and Variable2
+mosaic(~ Variable1 + Variable2, data = data,
+       shade = TRUE,
+       main = "Mosaic Plot of Variable1 and Variable2",
+       labeling_args = list(set_varnames = c(Variable1 = "Variable1", Variable2 = "Variable2")))
+# Cross-tabulate Variable1 and Variable2
+cross_tab <- table(data$Variable1, data$Variable2)
+
+# Bar chart
+barplot(cross_tab,
+        beside = TRUE,
+        legend.text = rownames(cross_tab),
+        col = brewer.pal(nrow(cross_tab), "Paired"),
+        main = "Frequency of Each Combination of Variable1 and Variable2",
+        xlab = "Variable1",
+        ylab = "Frequency")

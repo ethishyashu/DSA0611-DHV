@@ -1,0 +1,45 @@
+# Creating the dataset
+data <- data.frame(
+  ID = c(1, 2, 3, 4, 5),
+  Score = c(85, 92, 78, 88, 90)
+)
+# Histogram
+hist(data$Score, 
+     main = "Histogram of Score", 
+     xlab = "Score",
+     col = "skyblue",
+     border = "white")
+# Box plot
+boxplot(data$Score,
+        main = "Box Plot of Score",
+        ylab = "Score",
+        col = "lightgreen",
+        border = "darkgreen")
+# Define score ranges
+score_ranges <- cut(data$Score, breaks = c(0, 50, 70, 90, 100), include.lowest = TRUE)
+
+# Count scores in each range
+score_counts <- table(score_ranges)
+
+# Bar chart
+barplot(score_counts,
+        main = "Count of Scores in Different Ranges",
+        xlab = "Score Ranges",
+        ylab = "Count",
+        col = "lightblue",
+        border = "white")
+# Density plot
+plot(density(data$Score),
+     main = "Density Plot of Score",
+     xlab = "Score",
+     col = "purple")
+# Load ggplot2 library if not already loaded
+library(ggplot2)
+
+# Violin plot
+ggplot(data, aes(x = "", y = Score, fill = factor(ID))) +
+  geom_violin(trim = FALSE) +
+  scale_fill_discrete(name = "ID") +
+  labs(title = "Violin Plot of Score",
+       y = "Score") +
+  theme_minimal()

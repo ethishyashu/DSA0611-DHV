@@ -1,0 +1,186 @@
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(plotly)
+
+# Create a data frame
+data <- data.frame(
+  CustomerID = 1:30,
+  Age = c(35, 28, 42, 25, 38, 45, 23, 34, 40, 30, 29, 50, 32, 47, 36, 27, 41, 33, 39, 26, 48, 31, 44, 37, 43, 24, 46, 49, 21, 22),
+  Gender = c("Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female", "Male", "Female"),
+  PurchaseAmount = c(100, 80, 120, 90, 110, 150, 60, 130, 95, 85, 70, 160, 75, 140, 115, 65, 125, 135, 105, 95, 145, 90, 120, 125, 130, 85, 155, 140, 50, 60),
+  MembershipLevel = c("Gold", "Silver", "Bronze", "Bronze", "Silver", "Gold", "Silver", "Gold", "Bronze", "Silver", "Bronze", "Gold", "Silver", "Bronze", "Gold", "Silver", "Bronze", "Gold", "Silver", "Bronze", "Gold", "Silver", "Bronze", "Gold", "Silver", "Bronze", "Gold", "Silver", "Bronze", "Silver")
+)
+
+# Data Cleaning
+# Check for missing values
+missing_values <- sum(is.na(data))
+print(paste("Missing values:", missing_values))
+
+# Check data types
+str(data)
+
+# EDA Analysis
+# Summary statistics
+print("Summary statistics:")
+print(summary(data))
+
+# Gender distribution
+gender_distribution <- table(data$Gender)
+print("Gender distribution:")
+print(gender_distribution)
+
+# Membership Level distribution
+membership_distribution <- table(data$MembershipLevel)
+print("Membership Level distribution:")
+print(membership_distribution)
+
+# Visualizations
+
+# Age distribution
+age_hist <- ggplot(data, aes(x=Age)) +
+  geom_histogram(binwidth=5, fill="lightblue", color="black") +
+  ggtitle("Age Distribution") +
+  xlab("Age") +
+  ylab("Frequency")
+print(age_hist)
+
+# Purchase Amount distribution
+purchase_hist <- ggplot(data, aes(x=PurchaseAmount)) +
+  geom_histogram(binwidth=10, fill="lightgreen", color="black") +
+  ggtitle("Purchase Amount Distribution") +
+  xlab("Purchase Amount") +
+  ylab("Frequency")
+print(purchase_hist)
+
+# 3D Scatter Plot of Age, Purchase Amount, and Gender
+scatter3d_gender <- plot_ly(data, x = ~Age, y = ~PurchaseAmount, z = ~Gender, color = ~Gender, type = 'scatter3d', mode = 'markers') %>%
+  layout(title = "3D Scatter Plot: Age, Purchase Amount, and Gender")
+print(scatter3d_gender)
+
+# 3D Scatter Plot of Age, Purchase Amount, and Membership Level
+scatter3d_membership <- plot_ly(data, x = ~Age, y = ~PurchaseAmount, z = ~MembershipLevel, color = ~MembershipLevel, type = 'scatter3d', mode = 'markers') %>%
+  layout(title = "3D Scatter Plot: Age, Purchase Amount, and Membership Level")
+print(scatter3d_membership)
+
+# 3D Bar Plot of Purchase Amount by Gender and Membership Level
+bar3d_gender_membership <- plot_ly(data, x = ~Gender, y = ~PurchaseAmount, z = ~MembershipLevel, type = 'bar', color = ~Gender) %>%
+  layout(title = "3D Bar Plot: Purchase Amount by Gender and Membership Level")
+print(bar3d_gender_membership)
+
+# Additional Plots (20 plots total)
+# Bar plot of average purchase amount by gender
+avg_purchase_gender <- data %>%
+  group_by(Gender) %>%
+  summarise(AveragePurchase = mean(PurchaseAmount))
+
+bar_plot_gender <- ggplot(avg_purchase_gender, aes(x=Gender, y=AveragePurchase, fill=Gender)) +
+  geom_bar(stat="identity") +
+  ggtitle("Average Purchase Amount by Gender") +
+  xlab("Gender") +
+  ylab("Average Purchase Amount")
+print(bar_plot_gender)
+
+# Bar plot of average purchase amount by membership level
+avg_purchase_membership <- data %>%
+  group_by(MembershipLevel) %>%
+  summarise(AveragePurchase = mean(PurchaseAmount))
+
+bar_plot_membership <- ggplot(avg_purchase_membership, aes(x=MembershipLevel, y=AveragePurchase, fill=MembershipLevel)) +
+  geom_bar(stat="identity") +
+  ggtitle("Average Purchase Amount by Membership Level") +
+  xlab("Membership Level") +
+  ylab("Average Purchase Amount")
+print(bar_plot_membership)
+
+# Age vs Purchase Amount by Gender
+scatter_age_purchase_gender <- ggplot(data, aes(x=Age, y=PurchaseAmount, color=Gender)) +
+  geom_point(size=3) +
+  ggtitle("Age vs Purchase Amount by Gender") +
+  xlab("Age") +
+  ylab("Purchase Amount")
+print(scatter_age_purchase_gender)
+
+# Age vs Purchase Amount by Membership Level
+scatter_age_purchase_membership <- ggplot(data, aes(x=Age, y=PurchaseAmount, color=MembershipLevel)) +
+  geom_point(size=3) +
+  ggtitle("Age vs Purchase Amount by Membership Level") +
+  xlab("Age") +
+  ylab("Purchase Amount")
+print(scatter_age_purchase_membership)
+
+# Box plot of Purchase Amount by Gender
+box_plot_gender <- ggplot(data, aes(x=Gender, y=PurchaseAmount, fill=Gender)) +
+  geom_boxplot() +
+  ggtitle("Box Plot of Purchase Amount by Gender") +
+  xlab("Gender") +
+  ylab("Purchase Amount")
+print(box_plot_gender)
+
+# Box plot of Purchase Amount by Membership Level
+box_plot_membership <- ggplot(data, aes(x=MembershipLevel, y=PurchaseAmount, fill=MembershipLevel)) +
+  geom_boxplot() +
+  ggtitle("Box Plot of Purchase Amount by Membership Level") +
+  xlab("Membership Level") +
+  ylab("Purchase Amount")
+print(box_plot_membership)
+
+# Violin plot of Purchase Amount by Gender
+violin_plot_gender <- ggplot(data, aes(x=Gender, y=PurchaseAmount, fill=Gender)) +
+  geom_violin() +
+  ggtitle("Violin Plot of Purchase Amount by Gender") +
+  xlab("Gender") +
+  ylab("Purchase Amount")
+print(violin_plot_gender)
+
+# Violin plot of Purchase Amount by Membership Level
+violin_plot_membership <- ggplot(data, aes(x=MembershipLevel, y=PurchaseAmount, fill=MembershipLevel)) +
+  geom_violin() +
+  ggtitle("Violin Plot of Purchase Amount by Membership Level") +
+  xlab("Membership Level") +
+  ylab("Purchase Amount")
+print(violin_plot_membership)
+
+# Density plot of Age by Gender
+density_plot_age_gender <- ggplot(data, aes(x=Age, fill=Gender)) +
+  geom_density(alpha=0.5) +
+  ggtitle("Density Plot of Age by Gender") +
+  xlab("Age") +
+  ylab("Density")
+print(density_plot_age_gender)
+
+# Density plot of Age by Membership Level
+density_plot_age_membership <- ggplot(data, aes(x=Age, fill=MembershipLevel)) +
+  geom_density(alpha=0.5) +
+  ggtitle("Density Plot of Age by Membership Level") +
+  xlab("Age") +
+  ylab("Density")
+print(density_plot_age_membership)
+
+# Density plot of Purchase Amount by Gender
+density_plot_purchase_gender <- ggplot(data, aes(x=PurchaseAmount, fill=Gender)) +
+  geom_density(alpha=0.5) +
+  ggtitle("Density Plot of Purchase Amount by Gender") +
+  xlab("Purchase Amount") +
+  ylab("Density")
+print(density_plot_purchase_gender)
+
+# Density plot of Purchase Amount by Membership Level
+density_plot_purchase_membership <- ggplot(data, aes(x=PurchaseAmount, fill=MembershipLevel)) +
+  geom_density(alpha=0.5) +
+  ggtitle("Density Plot of Purchase Amount by Membership Level") +
+  xlab("Purchase Amount") +
+  ylab("Density")
+print(density_plot_purchase_membership)
+
+# Scatter plot matrix
+scatter_plot_matrix <- pairs(~Age + PurchaseAmount + Gender + MembershipLevel, data = data, main = "Scatter Plot Matrix")
+print(scatter_plot_matrix)
+
+# Correlation matrix heatmap
+correlation_matrix <- cor(data %>% select(Age, PurchaseAmount))
+heatmap(correlation_matrix, main = "Correlation Matrix Heatmap")
+
+# Bar plot of count of customers by gender
+bar_plot_count_gender <- ggplot(data, aes
+                                
